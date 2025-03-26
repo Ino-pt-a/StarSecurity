@@ -1,13 +1,14 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.sevice.RoleService;
-import ru.kata.spring.boot_security.demo.sevice.UserService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -16,8 +17,8 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
+@Transactional
 public class AdminController {
-
     private final UserService userService;
     private final RoleService roleService;
 

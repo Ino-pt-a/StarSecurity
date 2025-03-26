@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,19 +20,16 @@ public class User implements UserDetails {
     @Column(name = "username")
     @NotEmpty
     @Pattern(regexp = "^[A-Za-zА-Яа-я\\s]+$")
-    @NotNull
     private String username;
 
     @Column(name = "email", unique = true)
     @NotEmpty
     @Email
-    @NotNull
     private String email;
 
     @Column(name = "last_name")
     @NotEmpty
     @Pattern(regexp = "^[A-Za-zА-Яа-я\\s]+$")
-    @NotNull
     private String lastName;
 
 
@@ -40,13 +39,13 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     @NotEmpty
-    @NotNull
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
     private Set<Role> roles;
 
     public User() {
@@ -60,9 +59,8 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    // Геттеры и сеттеры
-
     @Override
+    @Transactional
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
