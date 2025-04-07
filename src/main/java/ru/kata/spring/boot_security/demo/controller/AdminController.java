@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -28,26 +30,22 @@ public class AdminController {
     }
 
     @GetMapping
-    public String admin(Model model) {
+    public String adminPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User currentUser = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("user", currentUser);
         model.addAttribute("users", userService.findAll());
-        return "admin/users";
-    }
-
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleService.findAll());
-        return "admin/add";
+        model.addAttribute("newUser", new User()); // для формы добавления
+        return "admin-page"; // единый шаблон
     }
 
     @PostMapping("/add")
-    public String addUser(@Valid @ModelAttribute("user") User user,
+    public String addUser(@Valid @ModelAttribute("newUser") User user,
                           @RequestParam("roles") List<Long> roleIds,
                           BindingResult bindingResult,
                           Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.findAll());
-            return "admin/add";
+            return "redirect:/admin?error=add";
         }
 
         Set<Role> selectedRoles = new HashSet<>();
@@ -60,22 +58,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUserForm(@PathVariable("id") Long id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("allRoles", roleService.findAll());
-        return "admin/edit";
-    }
-
     @PostMapping("/edit")
     public String updateUser(@Valid @ModelAttribute("user") User user,
                              @RequestParam("roles") List<Long> roleIds,
-                             BindingResult bindingResult,
-                             Model model) {
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.findAll());
-            return "admin/edit";
+            return "redirect:/admin?error=edit";
         }
 
         Set<Role> selectedRoles = new HashSet<>();

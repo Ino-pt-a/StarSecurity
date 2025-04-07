@@ -1,356 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
-    <title>Edit User (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
-
-        body {
-            background-color: #fff5f7;
-            font-family: 'Mochiy Pop P One', sans-serif;
-            color: #ff85a2;
-            overflow-x: hidden;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff85a2" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'), auto;
-        }
-
-        .kawaii-container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.15);
-            border: 3px solid #ffd6e0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        h1 {
-            text-align: center;
-            color: #ff85a2;
-            font-size: 28px;
-            margin-bottom: 25px;
-            text-shadow: 3px 3px 0px rgba(255, 214, 224, 0.8);
-        }
-
-        h1::after {
-            content: "✧･ﾟ: *✧･ﾟ:*";
-            display: block;
-            font-size: 16px;
-            opacity: 0.5;
-            margin-top: 5px;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.8rem;
-            color: #ff85a2;
-            font-size: 16px;
-            padding-left: 8px;
-            position: relative;
-        }
-
-        label::before {
-            content: "♥";
-            position: absolute;
-            left: -5px;
-            top: 0;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ffd6e0;
-            border-radius: 10px;
-            background-color: #fffafb;
-            font-family: 'Mochiy Pop P One', sans-serif;
-            transition: all 0.3s;
-            font-size: 16px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #ff85a2;
-            box-shadow: 0 0 0 4px rgba(255, 133, 162, 0.2);
-            transform: scale(1.02);
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 2rem;
-            margin: 1.5rem 0;
-            justify-content: center;
-        }
-
-        .radio-option {
-            position: relative;
-        }
-
-        .radio-option input {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ffb3c6;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
-
-        .radio-option input:checked {
-            background-color: #ff85a2;
-            transform: scale(1.1);
-            box-shadow: 0 0 0 4px rgba(255, 133, 162, 0.3);
-        }
-
-        .radio-option label {
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .radio-option:hover label {
-            transform: translateY(-3px);
-            text-shadow: 0 3px 0 rgba(255, 214, 224, 0.8);
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2.5rem;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            font-family: 'Mochiy Pop P One', sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 3px 0 #d23d7d;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-save {
-            background-color: #ff85a2;
-            color: white;
-            box-shadow: 0 6px 0 #df6582;
-        }
-
-        .btn-back {
-            background-color: #ffd6e0;
-            color: #ff85a2;
-            box-shadow: 0 6px 0 #dfb6c0;
-        }
-
-        .btn:hover {
-            transform: translateY(3px);
-            box-shadow: 0 3px 0;
-        }
-
-        .btn-save:hover {
-            background-color: #ff6b8d;
-        }
-
-        .btn-back:hover {
-            background-color: #ffc0d0;
-        }
-
-        /* Heart effects */
-        .hearts {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ff85a2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
-            pointer-events: none;
-            animation: float 3s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Click effect */
-        .click-effect {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background-color: rgba(255, 214, 224, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%) scale(0);
-            animation: clickPulse 0.6s forwards;
-        }
-
-        @keyframes clickPulse {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(3);
-                opacity: 0;
-            }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Edit User Modal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="kawaii-container">
-    <h1>Edit User (◕‿◕✿)</h1>
+<!-- Кнопка для вызова модального окна -->
+<button class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#editUserModal">
+    Open Edit Modal
+</button>
 
-    <form th:action="@{/admin/edit}" th:object="${user}" method="post">
-        <input type="hidden" th:field="*{id}"/>
-
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" th:field="*{username}" required/>
-        </div>
-
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" th:field="*{lastName}" required/>
-        </div>
-
-        <div class="form-group">
-            <label>Age</label>
-            <input type="number" th:field="*{age}" required/>
-        </div>
-
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" th:field="*{email}" required/>
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" th:field="*{password}" placeholder="Leave empty to keep current"/>
-        </div>
-
-        <div class="form-group">
-            <label>Role</label>
-            <div class="radio-group">
-                <div class="radio-option">
-                    <input type="radio" th:field="*{roles}" th:value="1" id="roleUser" checked/>
-                    <label for="roleUser">User ♡</label>
+<!-- Модальное окно -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/admin/edit}" method="post" th:object="${user}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="radio-option">
-                    <input type="radio" th:field="*{roles}" th:value="3" id="roleAdmin"/>
-                    <label for="roleAdmin">Admin ✨</label>
-                </div>
-            </div>
-        </div>
 
-        <div class="button-group">
-            <button type="submit" class="btn btn-save" id="saveBtn">
-                <span>Save</span> ✨
-            </button>
-            <a th:href="@{/admin}"><button type="button" class="btn btn-back" id="backBtn">
-                <span>Back</span> ♡
-            </button></a>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>ID</label>
+                        <input type="text" class="form-control" th:field="*{id}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label>First name</label>
+                        <input type="text" class="form-control" th:field="*{username}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" th:field="*{lastName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Age</label>
+                        <input type="number" class="form-control" th:field="*{age}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" th:field="*{email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="password" class="form-control" th:field="*{password}">
+                    </div>
+                    <div class="mb-3">
+                        <label>Role</label>
+                        <select multiple class="form-select" th:field="*{roles}">
+                            <option th:each="role : ${allRoles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
-<script>
-    // Heart explosion on button click
-    document.getElementById('saveBtn').addEventListener('click', function (e) {
-        for (let i = 0; i < 10; i++) {
-            createHeart();
-        }
-    });
-
-    // Heart explosion on left mouse click anywhere
-    document.addEventListener('click', function(e) {
-        if (e.button === 0) { // Left mouse button
-            for (let i = 0; i < 5; i++) {
-                createHeartAtPosition(e.clientX, e.clientY);
-            }
-
-            // Add click ripple effect
-            const clickEffect = document.createElement('div');
-            clickEffect.className = 'click-effect';
-            clickEffect.style.left = e.clientX + 'px';
-            clickEffect.style.top = e.clientY + 'px';
-            document.body.appendChild(clickEffect);
-
-            setTimeout(() => {
-                clickEffect.remove();
-            }, 600);
-        }
-    });
-
-    function createHeart() {
-        createHeartAtPosition(
-            Math.random() * window.innerWidth,
-            window.innerHeight + 20
-        );
-    }
-
-    function createHeartAtPosition(x, y) {
-        const heart = document.createElement('div');
-        heart.classList.add('hearts');
-
-        heart.style.left = x + 'px';
-        heart.style.top = y + 'px';
-        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        heart.style.opacity = Math.random() * 0.7 + 0.3;
-        heart.style.width = (Math.random() * 15 + 10) + 'px';
-        heart.style.height = heart.style.width;
-        heart.style.setProperty('--x-end', (Math.random() * 200 - 100) + 'px');
-
-        document.body.appendChild(heart);
-
-        setTimeout(() => {
-            heart.remove();
-        }, 3000);
-    }
-
-    // Enhanced heart animation
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg) translateX(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg) translateX(var(--x-end));
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-</script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

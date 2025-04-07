@@ -1,259 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Users List ✨</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Page</title>
+    <!-- Просто подключаем Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap');
-
-        body {
-            background-color: #f0f5ff;
-            font-family: 'Mochiy Pop One', sans-serif;
-            color: #7a6bcc;
+        .sidebar {
+            background-color: #f0f0f0;
+            height: 100vh;
+            width: 300px;
             padding: 20px;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(122, 107, 204, 0.3);
-            border: 3px solid #c1b8ff;
+        .main-content {
             padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        h1 {
-            text-align: center;
-            color: #8a6bff;
-            text-shadow: 2px 2px 0px #d1c7ff;
-            font-size: 28px;
-            margin-bottom: 25px;
-        }
-
-        .header-decoration {
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 40px;
-            transform: rotate(15deg);
-            opacity: 0.2;
-            color: #a991ff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 20px 0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        th {
-            background-color: #8a6bff;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        td {
-            padding: 10px 12px;
-            border-bottom: 2px solid #f0f5ff;
-            background-color: #fafbff;
-        }
-
-        tr:hover td {
-            background-color: #f5f7ff;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            background-color: #c1b8ff;
-            color: white;
-        }
-
-        .role-badge.admin {
-            background-color: #8a6bff;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .btn {
-            background-color: #8a6bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Mochiy Pop One', sans-serif;
-            font-size: 12px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 0 #6a4dff;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background-color: #6a4dff;
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #4a2dff;
-        }
-
-        .btn-edit {
-            background-color: #b8a6ff;
-            box-shadow: 0 2px 0 #8a6bff;
-        }
-
-        .btn-delete {
-            background-color: #ffa6d9;
-            box-shadow: 0 2px 0 #ff8ac2;
-        }
-
-        .btn-add {
-            display: block;
-            width: fit-content;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #a991ff;
-            box-shadow: 0 3px 0 #8a6bff;
-        }
-
-        .btn-add:hover {
-            background-color: #8a6bff;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 20px;
-        }
-
-        .pagination .btn {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pagination .btn.active {
-            background-color: #6a4dff;
-        }
-
-        .cute-corner {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            font-size: 60px;
-            line-height: 0;
-            opacity: 0.1;
-            color: #b8a6ff;
-        }
-
-        /* Star animation */
-        .star {
-            position: absolute;
-            font-size: 20px;
-            color: #ffd700;
-            animation: twinkle 2s infinite alternate;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 0.8; }
-            100% { opacity: 0; transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <span class="header-decoration">✧･ﾟ: *✧･ﾟ:*</span>
-    <h1>✧･ﾟ: *✧･ﾟ:* Kawaii users list *:･ﾟ✧*:･ﾟ✧</h1>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div style="display: flex; align-items: center; gap: 8px;" class="text-white">
+            <div class="info-value text-white" th:text="${user.username}">DemonLord666</div>
+            <div class="text-light">with role</div>
+            <span class="text-white" th:each="role : ${user.roles}"
+                  th:class="${role.name == 'ROLE_ADMIN'} ? 'role-badge admin' : 'role-badge'"
+                  th:text="${role.name}">ROLE_USER</span>
+        </div>
+        <div class="button-group">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-dark text-white-50">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
-    <a th:href="@{/admin/add}" class="btn btn-add">✧ Add a new user ✨</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 sidebar">
+            <a th:href="@{/admin}" class="btn btn-primary w-100">Admin</a>
+            <br>
+            <a th:href="@{/user}" class="btn  w-100">User</a>
+        </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>ID ✨</th>
-            <th>Username ♡</th>
-            <th>Email ✧˖°</th>
-            <th>Age (◠‿◠)</th>
-            <th>Roles ✿</th>
-            <th>Действия ✧</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}">1</td>
-            <td th:text="${user.username}">user</td>
-            <td th:text="${user.lastName}">lastName</td>
-            <td th:text="${user.email}">user@example.com</td>
-            <td th:text="${user.age}">20</td>
-            <td>
+        <div class="col-md-9 main-content">
+            <h2>Admin panel</h2>
+
+            <div class="container mt-5 shadow-sm">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin}">Users table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/add}">New user</a>
+                    </li>
+                </ul>
+                <div class="card">
+                    <div class="card-header text-black">
+                        <h4 class="card-subtitle mb-3">All users</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.id}">1</td>
+                                <td th:text="${user.username}">user</td>
+                                <td th:text="${user.lastName}">lastName</td>
+                                <td th:text="${user.age}">20</td>
+                                <td th:text="${user.email}">user@example.com</td>
+                                <td>
                         <span th:each="role : ${user.roles}"
                               th:class="${role.name == 'ROLE_ADMIN'} ? 'role-badge admin' : 'role-badge'"
                               th:text="${role.name}">ROLE_USER</span>
-            </td>
-            <td>
-                <div class="btn-group">
-                    <a th:href="@{/admin/edit/{id}(id=${user.id})}" class="btn btn-edit">✎</a>
-                    <a th:href="@{/admin/delete/{id}(id=${user.id})}" class="btn btn-delete">✕</a>
+                                </td>
+                                <td>
+                                    <div class="btn-group-sm">
+                                        <a th:href="@{/admin/edit/{id}(id=${user.id})}" class="btn btn-info">Edit</a>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group-sm">
+                                    <a th:href="@{/admin/delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <div class="pagination" th:if="${totalPages > 1}">
-        <a th:each="page : ${#numbers.sequence(1, totalPages)}"
-           th:href="@{/admin(page=${page})}"
-           th:class="${page == currentPage} ? 'btn active' : 'btn'"
-           th:text="${page}">1</a>
+            </div>
+        </div>
     </div>
 
-    <div class="cute-corner">✧･ﾟ: *✧･ﾟ:*</div>
-    <div class="button-group">
-        <form th:action="@{/logout}" method="post">
-            <button class="btn btn-add">✧ LogOut ✨</button>
-        </form>
-        </a>
-    </div>
-
+    <!-- Подключаем Bootstrap JS (необязательно для базового функционала) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </div>
-
-<script>
-    // Create twinkling stars
-    function createStars() {
-        const container = document.querySelector('.container');
-        const starCount = 15;
-
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            star.innerHTML = '✦';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            star.style.fontSize = (Math.random() * 10 + 10) + 'px';
-            container.appendChild(star);
-        }
-    }
-
-    // Run when page loads
-    window.addEventListener('load', createStars);
-</script>
 </body>
 </html>

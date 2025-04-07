@@ -1,199 +1,130 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap');
-
-        body {
-            background-color: #ffebf3;
-            font-family: 'Mochiy Pop One', sans-serif;
-            color: #ff6699;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+        .sidebar {
+            background-color: #f0f0f0;
+            height: 100vh;
+            width: 300px;
             padding: 20px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 105, 180, 1);
-            border: 3px solid #ffb6c1;
         }
 
-        h1 {
-            text-align: center;
-            color: #ff1493;
-            text-shadow: 2px 2px 0px #ffb6c1;
-            font-size: 28px;
-            margin-bottom: 25px;
+        .main-content {
+            padding: 20px;
+        }
+        .form-input {
+            margin-bottom: 10px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #ff69b4;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        input[type="password"] {
+        .form-input input {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #ffb6c1;
-            border-radius: 10px;
-            background-color: #fffafa;
-            font-family: 'Mochiy Pop One', sans-serif;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-        }
-
-        .radio-option input {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ff69b4;
-            border-radius: 50%;
-            margin-right: 8px;
-            position: relative;
-        }
-
-        .radio-option input:checked::before {
-            content: "";
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #ff69b4;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-        }
-
-        .btn {
-            background-color: #ff69b4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Mochiy Pop One', sans-serif;
-            font-size: 16px;
-            transition: all 0.3s;
-            box-shadow: 0 3px 0 #d23d7d;
-            margin: 5px;
-        }
-
-        .btn:hover {
-            background-color: #ff1493;
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #d23d7d;
-        }
-
-        .btn-secondary {
-            background-color: #ffb6c1;
-            box-shadow: 0 3px 0 #e68fac;
-        }
-
-        .btn-secondary:hover {
-            background-color: #ff8fab;
-        }
-
-        .hearts {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
-            pointer-events: none;
-            animation: float 3s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
+        .form-input input:focus {
+            background-color: #fffacd;
+            outline: none;
+            border-color: #ffd700;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>✧･ﾟ: *✧･ﾟ:* Add New User *:･ﾟ✧*:･ﾟ✧</h2>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div style="display: flex; align-items: center; gap: 8px;" class="text-white">
+            <div class="info-value text-white" th:text="${user.username}">DemonLord666</div>
+            <div class="text-light">with role</div>
+            <span class="text-white" th:each="role : ${user.roles}"
+                  th:class="${role.name == 'ROLE_ADMIN'} ? 'role-badge admin' : 'role-badge'"
+                  th:text="${role.name}">ROLE_USER</span>
+        </div>
+        <div class="button-group">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-dark text-white-50">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
-    <form th:action="@{/admin/add}" th:object="${user}" method="post">
-        <label>Name ♡ <input type="text" th:field="*{username}" required/></label><br/>
-        <label>Last name ✿ <input type="text" th:field="*{lastName}" required/></label><br/>
-        <label>Age (◕‿◕✿) <input type="text" th:field="*{age}" required/></label><br/>
-        <label>Email ˚₊· ͟͟͞͞➳❥ <input type="email" th:field="*{email}" required/></label><br/>
-        <label>Password ✧˖° <input type="password" th:field="*{password}" required/></label><br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 sidebar">
+            <a th:href="@{/admin}" class="btn btn-primary w-100">Admin</a>
+            <br>
+            <a th:href="@{/user}" class="btn  w-100">User</a>
+        </div>
 
-        <div class="form-group">
-            <label>Role ♡⸜(˶˃ ᵕ ˂˶)⸝♡</label>
-            <div class="radio-group">
-                <div class="radio-option">
-                    <input type="radio" th:field="*{roles}" th:value="1" id="roleUser" checked/>
-                    <label for="roleUser">User</label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" th:field="*{roles}" th:value="3" id="roleAdmin"/>
-                    <label for="roleAdmin">Admin</label>
+        <div class="col-md-9 main-content">
+            <h2>Admin panel</h2>
+            <div class="container mt-5 shadow-sm">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">Users table</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link active" th:href="@{/admin/add}">New user</a>
+                    </li>
+                </ul>
+                <div class="card">
+                    <div class="card-header text-black">
+                        <h4 class="card-subtitle mb-3">All users</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/add}" th:object="${user}" method="post" style="text-align: center">
+                            <div>
+                                <label style="text-align: center">First name</label>
+                                <br>
+                                <input type="text" class="form-input" th:field="*{username}" required/>
+                            </div>
+                            <div>
+                                <label style="text-align: center">Last name</label>
+                                <br>
+                                <input type="text" class="form-input" th:field="*{lastName}" required/>
+                            </div>
+                            <div>
+                                <label style="text-align: center">Age</label>
+                                <br>
+                                <input type="number" th:field="*{age}" required/>
+                            </div>
+                            <div>
+                                <label style="text-align: center">Email</label>
+                                <br>
+                                <input type="email" th:field="*{email}" required/>
+                            </div>
+                            <div>
+                                <label style="text-align: center">Password</label>
+                                <br>
+                                <input type="text" th:field="*{password}" required/>
+                            </div>
+                            <div class="mb-3 text-center">
+                                <label for="role" class="form-label d-block">Role</label>
+                                <div class="d-flex justify-content-center">
+                                    <select class="form-select w-25" style="text-align: center" id="role" th:field="*{roles}" required>
+                                        <option th:each="role : ${allRoles}"
+                                                th:value="${role.id}"
+                                                th:text="${role.name}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>                            <br>
+                            <div>
+                                <button type="submit" class="btn btn-success" id="saveBtn">Add new user</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
-        <div style="text-align: center; margin-top: 25px;">
-            <button type="submit" class="btn" id="saveBtn">Save (っ◕‿◕)っ</button>
-            <a th:href="@{/admin}">
-                <button type="button" class="btn btn-secondary">Back ˗ˏˋ ♡ ˎˊ˗</button>
-            </a>
-        </div>
-    </form>
-    <script>
-        document.getElementById('saveBtn').addEventListener('click', function (e) {
-            for (let i = 0; i < 10; i++) {
-                createHeart();
-            }
-        });
+    </div>
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('hearts');
-
-            heart.style.left = Math.random() * window.innerWidth + 'px';
-            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            heart.style.opacity = Math.random();
-            heart.style.width = (Math.random() * 15 + 10) + 'px';
-            heart.style.height = heart.style.width;
-
-            document.body.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 3000);
-        }
-    </script>
+    <!-- Подключаем Bootstrap JS (необязательно для базового функционала) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </div>
 </body>
 </html>
