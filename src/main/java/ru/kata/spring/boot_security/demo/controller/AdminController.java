@@ -19,7 +19,6 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
-@Transactional
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;

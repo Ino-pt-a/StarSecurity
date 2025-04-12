@@ -174,10 +174,10 @@
                             <input type="text" name="password" required/>
                         </div>
                         <div class="mb-3 text-center">
-                            <label for="role" class="form-label d-block">Role</label>
+                            <label for="role" class="form-label d-block">Roles</label>
                             <div class="d-flex justify-content-center">
                                 <select class="form-select w-25" style="text-align: center" id="role"
-                                        th:field="*{roles}" required>
+                                        th:field="*{roles}" multiple required>
                                     <option th:each="role : ${allRoles}"
                                             th:value="${role.id}"
                                             th:text="${role.name}">
