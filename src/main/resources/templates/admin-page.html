@@ -249,30 +249,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script> function loadUserData(button) {
-    const row = button.closest('tr');
-    const userId = row.cells[0].textContent;
-    const username = row.cells[1].textContent;
-    const lastName = row.cells[2].textContent;
-    const age = row.cells[3].textContent;
-    const email = row.cells[4].textContent;
-
-    // Получаем роли из ячейки таблицы
-    const roleBadges = row.cells[5].querySelectorAll('.role-badge');
-    const userRoles = Array.from(roleBadges).map(badge => badge.textContent.trim());
-
-    // Устанавливаем значения в модальное окно
-    document.querySelector('#editModal input[name="id"]').value = userId;
-    document.querySelector('#editModal input[name="username"]').value = username;
-    document.querySelector('#editModal input[name="lastName"]').value = lastName;
-    document.querySelector('#editModal input[name="age"]').value = age;
-    document.querySelector('#editModal input[name="email"]').value = email;
-
-    // Выбираем роли пользователя в select
-    const roleSelect = document.querySelector('#editModal select[name="roles"]');
-    Array.from(roleSelect.options).forEach(option => {
-        option.selected = userRoles.includes(option.textContent.trim());
-    });
-}</script>
+<script src="/js/admin.js"></script>
 </body>
 </html>
